@@ -11,8 +11,7 @@ LOGS = logging.getLogger(__name__)
 @register(outgoing=True, pattern=r"^\.(get_id|id)(?:\s|$)([\s\S]*)")
 async def _(event):
     "To get id of the group or user."
-    input_str = event.pattern_match.group(2)
-    if input_str:
+    if input_str := event.pattern_match.group(2):
         try:
             p = await event.client.get_entity(input_str)
         except Exception as e:

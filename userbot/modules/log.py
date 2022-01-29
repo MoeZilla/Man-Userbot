@@ -41,20 +41,12 @@ async def monito_p_m_s(event):
             if LOG_CHATS_.RECENT_USER != chat.id:
                 LOG_CHATS_.RECENT_USER = chat.id
                 if LOG_CHATS_.NEWPM:
-                    if LOG_CHATS_.COUNT > 1:
-                        await LOG_CHATS_.NEWPM.edit(
-                            LOG_CHATS_.NEWPM.text.replace(
-                                "**💌 #NEW_MESSAGE**",
-                                f" • `{LOG_CHATS_.COUNT}` **Pesan**",
-                            )
+                    await LOG_CHATS_.NEWPM.edit(
+                        LOG_CHATS_.NEWPM.text.replace(
+                            "**💌 #NEW_MESSAGE**",
+                            f" • `{LOG_CHATS_.COUNT}` **Pesan**",
                         )
-                    else:
-                        await LOG_CHATS_.NEWPM.edit(
-                            LOG_CHATS_.NEWPM.text.replace(
-                                "**💌 #NEW_MESSAGE**",
-                                f" • `{LOG_CHATS_.COUNT}` **Pesan**",
-                            )
-                        )
+                    )
                     LOG_CHATS_.COUNT = 0
                 LOG_CHATS_.NEWPM = await event.client.send_message(
                     BOTLOG_CHATID,
@@ -162,11 +154,7 @@ async def set_pmlog(event):
         h_type = False
     elif input_str == "on":
         h_type = True
-    if gvarstatus("PMLOG") and gvarstatus("PMLOG") == "false":
-        PMLOG = False
-    else:
-        PMLOG = True
-    if PMLOG:
+    if PMLOG := not gvarstatus("PMLOG") or gvarstatus("PMLOG") != "false":
         if h_type:
             await event.edit("**PM LOG Sudah Diaktifkan**")
         else:
@@ -192,11 +180,10 @@ async def set_gruplog(event):
         h_type = False
     elif input_str == "on":
         h_type = True
-    if gvarstatus("GRUPLOG") and gvarstatus("GRUPLOG") == "false":
-        GRUPLOG = False
-    else:
-        GRUPLOG = True
-    if GRUPLOG:
+    if (
+        GRUPLOG := not gvarstatus("GRUPLOG")
+        or gvarstatus("GRUPLOG") != "false"
+    ):
         if h_type:
             await event.edit("**Group Log Sudah Diaktifkan**")
         else:

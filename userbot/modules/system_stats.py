@@ -104,10 +104,10 @@ async def psu(event):
     bw = "**Bandwith Digunakan**\n"
     bw += f"`Unggah  : {get_size(psutil.net_io_counters().bytes_sent)}`\n"
     bw += f"`Download: {get_size(psutil.net_io_counters().bytes_recv)}`\n"
-    help_string = f"{str(softw)}\n"
-    help_string += f"{str(cpuu)}\n"
-    help_string += f"{str(memm)}\n"
-    help_string += f"{str(bw)}\n"
+    help_string = f'{softw}\n'
+    help_string += f'{cpuu}\n'
+    help_string += f'{memm}\n'
+    help_string += f'{bw}\n'
     help_string += "**Informasi Mesin**\n"
     help_string += f"`Python {sys.version}`\n"
     help_string += f"`Telethon {__version__}`"
@@ -179,8 +179,7 @@ async def bot_ver(event):
 async def pipcheck(pip):
     if pip.text[0].isalpha() or pip.text[0] in ("/", "#", "@", "!"):
         return
-    pipmodule = pip.pattern_match.group(1)
-    if pipmodule:
+    if pipmodule := pip.pattern_match.group(1):
         await pip.edit("`Sedang Mencari...`")
         pipc = await asyncrunapp(
             "pip3",
@@ -191,9 +190,9 @@ async def pipcheck(pip):
         )
 
         stdout, stderr = await pipc.communicate()
-        pipout = str(stdout.decode().strip()) + str(stderr.decode().strip())
-
-        if pipout:
+        if pipout := str(stdout.decode().strip()) + str(
+            stderr.decode().strip()
+        ):
             if len(pipout) > 4096:
                 await pip.edit("`Output Terlalu Besar, Dikirim Sebagai File`")
                 with open("output.txt", "w+") as file:

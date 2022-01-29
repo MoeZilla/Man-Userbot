@@ -61,8 +61,7 @@ async def tede_chatbot(event):
         return
     if event.text and event.is_reply:
         rep = await ngapain_rep(event.message.message)
-        tr = translator.translate(rep, LANGUAGE)
-        if tr:
+        if tr := translator.translate(rep, LANGUAGE):
             await event.reply(tr.text)
 
 

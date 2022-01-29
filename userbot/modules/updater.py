@@ -126,8 +126,11 @@ async def upstream(event):
     off_repo = UPSTREAM_REPO_URL
     force_update = False
     try:
-        txt = "**Pembaruan Tidak Dapat Di Lanjutkan Karna "
-        txt += "Beberapa Masalah Terjadi**\n\n**LOGTRACE:**\n"
+        txt = (
+            "**Pembaruan Tidak Dapat Di Lanjutkan Karna "
+            + "Beberapa Masalah Terjadi**\n\n**LOGTRACE:**\n"
+        )
+
         repo = Repo()
     except NoSuchPathError as error:
         await event.edit(f"{txt}\n**Directory {error} Tidak Dapat Di Temukan**")
@@ -161,7 +164,7 @@ async def upstream(event):
     changelog = await gen_chlog(repo, f"HEAD..upstream/{ac_br}")
 
     if changelog == "" and not force_update:
-        await event.edit(f"\n**✥ Man-Userbot Sudah Versi Terbaru**\n")
+        await event.edit('\n**✥ Man-Userbot Sudah Versi Terbaru**\n')
         await asyncio.sleep(15)
         await event.delete()
         return repo.__del__()

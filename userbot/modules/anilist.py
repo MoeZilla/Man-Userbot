@@ -34,7 +34,7 @@ def time_formatter(milliseconds: int) -> str:
 def shorten(description, info="anilist.co"):
     msg = ""
     if len(description) > 700:
-        description = description[0:200] + "....."
+        description = description[:200] + "....."
         msg += f"\n**Description**:\n{description} [Read More]({info})"
     else:
         msg += f"\n**Description**: \n   {description}"
@@ -195,7 +195,7 @@ async def formatJSON(outData):
     link = f"https://anilist.co/anime/{jsonData['id']}"
     msg += f"[{title}]({link})"
     msg += f"\n\n**Type** : {jsonData['format']}"
-    msg += f"\n**Genres** : "
+    msg += '\n**Genres** : '
     for g in jsonData["genres"]:
         msg += g + " "
     msg += f"\n**Status** : {jsonData['status']}"
@@ -215,22 +215,20 @@ url = "https://graphql.anilist.co"
 @register(outgoing=True, pattern=r"^\.anichar ?(.*)")
 async def anilist(event):
     search = event.pattern_match.group(1)
-    reply_to_id = event.message.id
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
+    reply_to_id = event.reply_to_msg_id or event.message.id
     variables = {"query": search}
-    json = (
-        requests.post(url, json={"query": character_query, "variables": variables})
+    if json := (
+        requests.post(
+            url, json={"query": character_query, "variables": variables}
+        )
         .json()["data"]
         .get("Character", None)
-    )
-    if json:
+    ):
         msg = f"**{json.get('name').get('full')}**\n"
         description = f"{json['description']}"
         site_url = json.get("siteUrl")
         msg += shorten(description, site_url)
-        image = json.get("image", None)
-        if image:
+        if image := json.get("image", None):
             image = image.get("large")
             await event.delete()
             await bot.send_file(
@@ -262,9 +260,7 @@ async def anilist(event):
 @register(outgoing=True, pattern=r"^\.animanga ?(.*)")
 async def anilist(event):
     search = event.pattern_match.group(1)
-    reply_to_id = event.message.id
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
+    reply_to_id = event.reply_to_msg_id or event.message.id
     variables = {"search": search}
     json = (
         requests.post(url, json={"query": manga_query, "variables": variables})

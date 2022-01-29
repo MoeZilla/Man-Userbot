@@ -948,9 +948,7 @@ async def slap(replied_user, event):
     """Construct a funny slap sentence !!"""
     user_id = replied_user.id
     first_name = replied_user.first_name
-    username = replied_user.username
-
-    if username:
+    if username := replied_user.username:
         slapped = "@{}".format(username)
     else:
         slapped = f"[{first_name}](tg://user?id={user_id})"
@@ -1007,11 +1005,11 @@ async def butts(e):
 @register(outgoing=True, pattern=r"^\.(yes|no|maybe|decide)$")
 async def decide(event):
     decision = event.pattern_match.group(1).lower()
-    message_id = event.reply_to_msg_id if event.reply_to_msg_id else None
+    message_id = event.reply_to_msg_id or None
     if decision != "decide":
         r = requests.get(f"https://yesno.wtf/api?force={decision}").json()
     else:
-        r = requests.get(f"https://yesno.wtf/api").json()
+        r = requests.get('https://yesno.wtf/api').json()
     await event.delete()
     await event.client.send_message(
         event.chat_id, str(r["answer"]).upper(), reply_to=message_id, file=r["image"]
@@ -1021,7 +1019,7 @@ async def decide(event):
 @register(outgoing=True, pattern=r"^\.;_;$", ignore_unsafe=True)
 async def fun(idk):
     t = ";_;"
-    for j in range(10):
+    for _ in range(10):
         t = t[:-1] + "_;"
         await idk.edit(t)
 
@@ -1266,7 +1264,7 @@ async def iqless(e):
 async def moon(moone):
     deq = deque(list("🌗🌘🌑🌒🌓🌔🌕🌖"))
     try:
-        for x in range(32):
+        for _ in range(32):
             await sleep(0.1)
             await moone.edit("".join(deq))
             deq.rotate(1)
@@ -1338,7 +1336,7 @@ async def rain(event):
 async def boxes(event):
     deq = deque(list("🟥🟧🟨🟩🟦🟪🟫⬛⬜"))
     try:
-        for x in range(32):
+        for _ in range(32):
             await sleep(0.1)
             await event.edit("".join(deq))
             deq.rotate(1)
@@ -1350,7 +1348,7 @@ async def boxes(event):
 async def hmm(event):
     deq = deque(list("🤔🧐🤔🧐🤔🧐"))
     try:
-        for x in range(32):
+        for _ in range(32):
             await sleep(0.1)
             await event.edit("".join(deq))
             deq.rotate(1)
@@ -1362,7 +1360,7 @@ async def hmm(event):
 async def haha(event):
     deq = deque(list("😂🤣😂🤣😂🤣"))
     try:
-        for x in range(32):
+        for _ in range(32):
             await sleep(0.1)
             await event.edit("".join(deq))
             deq.rotate(1)
@@ -1374,7 +1372,7 @@ async def haha(event):
 async def operations(event):
     deq = deque(list("!@#$%^&*()_+="))
     try:
-        for x in range(32):
+        for _ in range(32):
             await sleep(0.1)
             await event.edit("".join(deq))
             deq.rotate(1)
@@ -1532,8 +1530,7 @@ async def payf(event):
 @register(outgoing=True, pattern=r"^\.lfy (.*)")
 async def let_me_google_that_for_you(lmgtfy_q):
     textx = await lmgtfy_q.get_reply_message()
-    qry = lmgtfy_q.pattern_match.group(1)
-    if qry:
+    if qry := lmgtfy_q.pattern_match.group(1):
         query = str(qry)
     elif textx:
         query = textx
@@ -1551,7 +1548,7 @@ async def let_me_google_that_for_you(lmgtfy_q):
 async def emo(sigh):
     """Ok..."""
     okay = "-_-"
-    for i in range(10):
+    for _ in range(10):
         okay = okay[:-1] + "_-"
         await sigh.edit(okay)
 

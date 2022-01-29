@@ -28,11 +28,10 @@ def weird_division(n, d):
 
 
 @register(outgoing=True, pattern=r"^\.chatfs(?: |$)(.*)")
-async def _(event):  # sourcery no-metrics
+async def _(event):    # sourcery no-metrics
     "Shows you the complete media/file summary of the that group"
     entity = event.chat_id
-    input_str = event.pattern_match.group(1)
-    if input_str:
+    if input_str := event.pattern_match.group(1):
         try:
             entity = int(input_str)
         except ValueError:
